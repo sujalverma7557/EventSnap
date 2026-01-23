@@ -1,0 +1,377 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+main {
+  min-height: 43rem;
+}
+.compressed-image {
+  width: 171px;
+  height: 180px;
+  object-fit: cover;
+}
+
+.sidebar-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #f8f9fa;
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(-100%);
+  z-index: 100;
+  padding-top: 10px;
+}
+
+.sidebar-menu.show {
+  transform: translateY(0);
+}
+
+.sidebar-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  color: #939aa0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.sidebar-menu .dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.hovered-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.hovered-title {
+  margin-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.hovered-subtitle {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.my-masonry-grid {
+  display: flex;
+  margin-left: -20px;
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 20px;
+  background-clip: padding-box;
+}
+
+.my-masonry-grid_item {
+  margin-bottom: 20px;
+}
+
+.image-card-img-sharp {
+  border-radius: 0;
+}
+.card:hover {
+  outline: none;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 600px;
+  max-height: 100%;
+}
+
+.modal-dialog {
+  position: relative;
+  width: 80%;
+  max-width: 80vw;
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow-y: auto;
+}
+
+
+
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.modal-title {
+  flex-grow: 1;
+  margin-right: auto;
+}
+
+.modal-body {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+/*profile  page css*/
+.user-profile-container {
+  padding-top: 2rem;
+}
+
+.profile-row {
+  align-items: center;
+}
+
+.profile-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-profile-image {
+  width: 80%;
+  height: 80%;
+  margin-right: 20px;
+  overflow: hidden;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.user-profile-header {
+  margin-bottom: 20px;
+  
+}
+
+.user-profile-info {
+  flex-grow: 1;
+}
+
+.user-profile-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.user-profile-email {
+  font-size: 16px;
+  color: #888;
+  margin: 0;
+}
+
+.user-profile {
+  border: none;
+  padding: 20px;
+  justify-content: center;
+}
+
+.profile-heading {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.profile-text {
+  margin-bottom: 10px;
+  color: #505855;
+}
+
+@media (min-width: 768px) {
+  .profile-col {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+}
+
+/* UPLOAD CARD CSS */
+.upload-masonry-container {
+  padding-top: 40px;
+  width: 100vw;
+  padding-left: 230px;
+  padding-right: 230px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.upload-card {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #ddd;
+  text-align: center;
+  transition: border-color 0.3s ease;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 20px;
+}
+
+.upload-card:hover {
+  cursor: pointer;
+  border-color: #0084ff;
+}
+
+.upload-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.my-masonry-grid {
+  display: flex;
+  margin-left: -10px;
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 10px;
+  background-clip: padding-box;
+}
+
+.my-masonry-grid_column > div {
+  margin-bottom: 10px;
+}
+
+/* ERRORModal.css */
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.modal-content1 {
+  position: relative;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  max-width: 400px;
+  z-index: 9999;
+}
+
+/* crop Modal */
+.image-box {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+.image-box img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+/* blurhash css */
+.circular-blurhash {
+  height: 130px;
+  width: 130px;
+  margin-top: 4px;
+  margin-left: 4px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/*EditProfileModal*/
+
+/* Modal Overlay Styles */
+.modal-overlay2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Content Styles */
+.modal-content2 {
+  background-color: #fff;
+  padding: 20px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Centered Modal Content */
+.centered-modal-content2 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+}
+
+/* Additional Styles as per your requirements */
+
+
+
