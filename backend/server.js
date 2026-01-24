@@ -3,9 +3,11 @@ import path from 'path'
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import userRoutes from './routes/userRoutes.js';
-import productRoutes from "./routes/productRoutes.js";
 import uploadRoutes from './routes/uploadRoutes.js';
 import downloadRoutes from "./routes/downloadRoutes.js";
+import eventRoutes from './routes/eventRoutes.js';
+import photoRoutes from './routes/photoRoutes.js';
+
 
 dotenv.config()
 connectDB()
@@ -14,8 +16,10 @@ const app = express();
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use('/api/events', eventRoutes);
+app.use('/api/photos', photoRoutes);
 
-app.use('/api/products',productRoutes)
+
 app.use('/api/users',userRoutes)
 app.use('/api/upload',uploadRoutes)
 

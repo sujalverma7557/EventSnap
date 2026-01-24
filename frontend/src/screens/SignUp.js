@@ -18,6 +18,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [emailError, setEmailError] = useState('');
   const [errorModal,setModalOpen]=useState(false);
   const [error,setError] = useState(false);
 
@@ -55,7 +56,16 @@ const SignUp = () => {
   };
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    const emailValue = e.target.value;
+    setEmail(emailValue);
+    
+    // Validate email format
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (emailValue && !emailRegex.test(emailValue)) {
+      setEmailError('Please enter a valid email address');
+    } else {
+      setEmailError('');
+    }
   };
 
   const handleOccupationChange = (e) => {
@@ -78,6 +88,15 @@ const SignUp = () => {
   }
 
   const handleSignUp = () => {
+    // Check email validity
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!emailRegex.test(email)) {
+      setError(true);
+      setEmailError('Please enter a valid email address');
+      modalOpen();
+      return;
+    }
+    
     if (password === confirmPassword && name && email && password && occupation && about && contactNumber  && uploadedImage ) {
       dispatch(register(name, email, password, occupation, about, contactNumber , uploadedImage));
       Navigate('/', { replace: true });
@@ -129,14 +148,21 @@ const SignUp = () => {
             </div>
             <div className="d-flex flex-row align-items-center mb-4" style={{width:'60%'}}>
               <i className="fas fa-envelope me-3" style={{ fontSize: 'lg' }}></i>
-              <input
-                type="email2"
-                className="form-control"
-                id="form2"
-                placeholder="Your Email"
-                value={email}
-                onChange={handleEmailChange}
-              />
+              <div style={{ width: '100%' }}>
+                <input
+                  type="email"
+                  className={`form-control ${emailError ? 'is-invalid' : ''}`}
+                  id="form2"
+                  placeholder="Your Email"
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+                {emailError && (
+                  <div className="invalid-feedback" style={{ display: 'block' }}>
+                    {emailError}
+                  </div>
+                )}
+              </div>
             </div>
             <div className="d-flex flex-row align-items-center mb-4" style={{width:'60%'}}>
               <i className="fa-solid fa-graduation-cap me-3" style={{ fontSize: 'lg' }}></i>

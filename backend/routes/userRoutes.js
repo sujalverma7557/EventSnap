@@ -6,12 +6,13 @@ import {
   registerUser,
 } from '../controllers/userControllers.js';
 import { protect } from '../middleware/authMiddleware.js';
-import multer from 'multer';
+// import multer from 'multer';
 
 const router = express.Router();
-const upload = multer();
+// const upload = multer();
 
-router.route('/signUp').post(upload.single('image'), registerUser);
+// router.route('/signUp').post(upload.single('image'), registerUser);
+router.route('/signUp').post(registerUser);
 router.post('/login', authUser);
 router.route('/profile').get(protect, getUserProfile).put(editProfile);
 

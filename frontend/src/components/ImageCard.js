@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import ImageModal from './ImageModal';
 import { Blurhash } from 'react-blurhash';
 
-const ImageCard = ({ product }) => {
+const ImageCard = ({ product, photo }) => {
+  // Support both product (legacy) and photo (new) props
+  const item = photo || product;
   const [isHovered, setIsHovered] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -54,18 +56,11 @@ const ImageCard = ({ product }) => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
+        style={{ cursor: 'pointer' }}
       >
-        {isHovered && (
-          <div className="hovered-content">
-            <h5 className="card-title hovered-title">
-              <b>{product.title}</b>
-            </h5>
-            <h6 className="card-subtitle text-muted hovered-subtitle">{product.gear}</h6>
-          </div>
-        )}
-        {!isImageLoaded && (
+        {!isImageLoaded && item.blurhash && (
           <Blurhash
-            hash={product.blurhash}
+            hash={item.blurhash}
             width="100%"
             height={400}
             resolutionX={32}
@@ -73,24 +68,43 @@ const ImageCard = ({ product }) => {
           />
         )}
         <img
-          src={product.image}
+          src={item.image}
           className={`card-img-top image-card-img-sharp ${isImageLoaded ? 'image-loaded' : ''}`}
           variant="bottom"
-          alt="top"
+          alt="photo"
           thumbnail
           onLoad={handleImageLoad}
         />
-        {modalOpen && <ImageModal product={product} closeModal={closeModal} />}
+        {modalOpen && <ImageModal product={item} closeModal={closeModal} />}
         {isHovered && isImageLoaded && (
-          <>
-            <div className="card-body">
-              <p className="card-text">{product.caption}</p>
+          <div className="card-footer" style={{ background: 'rgba(0,0,0,0.7)', color: 'white', padding: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {item.uploadedBy && (
+                  <>
+                    {item.uploadedBy.image && (
+                      <img 
+                        src={item.uploadedBy.image} 
+                        alt={item.uploadedBy.name}
+                        style={{
+                          width: '30px',
+                          height: '30px',
+                          borderRadius: '50%',
+                          objectFit: 'cover'
+                        }}
+                      />
+                    )}
+                    <span style={{ fontSize: '14px', fontWeight: '500' }}>
+                      {item.uploadedBy.name}
+                    </span>
+                  </>
+                )}
+              </div>
+              <div style={{ fontSize: '12px', color: '#ddd' }}>
+                {calculateDaysAgo(item.createdAt)}
+              </div>
             </div>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">{product.category}</li>
-            </ul>
-            <div className="card-footer text-muted">{calculateDaysAgo(product.createdAt)}</div>
-          </>
+          </div>
         )}
       </div>
     </>

@@ -2,19 +2,32 @@ import {createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import { listUsersReducer,userEditProfileReducer,userLoginReducer, userRegisterReducer } from "./reducers/userReducer";
-import { listProductsReducer,createProductReducer } from "./reducers/productReducer";
+import { photoListReducer, photoCreateReducer, photoDeleteReducer } from "./reducers/photoReducer";
+import { eventCreateReducer, eventJoinReducer, eventListReducer, eventDetailsReducer } from "./reducers/eventReducer";
+import { userPhotoListReducer } from './reducers/photoReducer';
 
 
 const reducer = combineReducers({
   listUsers: listUsersReducer,
-  listProducts: listProductsReducer,
+  photoList: photoListReducer,
+  photoCreate: photoCreateReducer,
+  photoDelete: photoDeleteReducer,
   userLogin: userLoginReducer,
   register: userRegisterReducer,
-  createProduct: createProductReducer,
-  editProfile:userEditProfileReducer
+  editProfile:userEditProfileReducer,
+  eventCreate: eventCreateReducer,
+  eventJoin: eventJoinReducer,
+  eventList: eventListReducer,
+  eventDetails: eventDetailsReducer,
+  userPhotoList: userPhotoListReducer,
 })
 
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo'))
+  : null;
+
 const initialState = {
+  userLogin: { userInfo: userInfoFromStorage },
 }
 
 const middleware = [thunk]

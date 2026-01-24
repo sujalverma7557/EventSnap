@@ -35,7 +35,7 @@ const LoginScreen = () => {
     setShowErrorModal(true);
   }
   if (userInfo) {
-    Navigate('/userProfile',{state: { user: userInfo }});
+    Navigate('/');
   }
 
   return (

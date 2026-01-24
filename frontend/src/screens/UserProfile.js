@@ -1,37 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import { Image } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
-import { listProducts } from '../actions/productAction';
+import { getPhotosByUser } from '../actions/photoActions';
+// import { listProducts } from '../actions/productAction';
+// import { listPhotos } from '../actions/photoActions';
+
 import Masonry from 'react-masonry-css';
 import { useSelector, useDispatch } from 'react-redux';
 import ImageCard from '../components/ImageCard';
-import UploadCard from '../components/UploadCard';
 import { logout } from '../actions/userActions';
 import { useLocation, useNavigate } from 'react-router-dom';
 import EditProfileModal from '../components/EditProfileModal';
-import UploadModal from '../components/UploadModal';
+// import UploadModal from '../components/UploadModal';
 import { Helmet } from 'react-helmet';
 
 const UserProfile = () => {
   const location = useLocation();
-  const { user } = location.state;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const productList = useSelector((state) => state.listProducts);
-  const { loading, error, products } = productList;
-  const [uploadCardClosed, setUploadCardClosed] = useState(true);
+  
+  // Get user from Redux state or location state
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo: reduxUserInfo } = userLogin;
+
+  const userPhotoList = useSelector((state) => state.userPhotoList || {});
+  const { loading = false, error = null, photos = [] } = userPhotoList;
+      
+  // Try to get user from location state first, fallback to Redux
+  const userFromLocation = location.state?.user;
+  const initialUser = userFromLocation || reduxUserInfo;
+  
+  // const productList = useSelector((state) => state.listProducts);
+  // const { loading, error, products } = productList;
+
   const [EditProfileModalClosed, setEditProfileModalClosed] = useState(true);
-  const [currentUser, setCurrentUser] = useState(user);
+  const [currentUser, setCurrentUser] = useState(initialUser);
+
+  // Redirect to login if no user found
+  useEffect(() => {
+    if (!initialUser) {
+      navigate('/login');
+    }
+  }, [initialUser, navigate]);
 
   useEffect(() => {
-    setCurrentUser(user);
-  }, [user,EditProfileModal,currentUser]);
+    if (initialUser) {
+      setCurrentUser(initialUser);
+    }
+  }, [initialUser]);
 
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch, UploadModal,EditProfileModal,UploadCard]);
+    if (currentUser?._id) {
+      dispatch(getPhotosByUser(currentUser._id));
+    }
+  }, [dispatch, currentUser?._id]);
+    
 
-  const filteredProducts = products.filter((product) => product.author === user.name);
+  // useEffect(() => {
+  //   dispatch(listProducts());
+  // }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(listPhotos());
+  // }, [dispatch]);
+  
+
+  // If no user, show loading
+  if (!currentUser) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  // const filteredProducts = products?.filter((product) => product.author === currentUser.name) || [];
+  // const filteredPhotos = photos.filter(
+  //   (photo) => photo.uploadedBy?._id === currentUser._id
+  // );
+  
 
   const breakpointColumnsObj = {
     default: 3,
@@ -39,30 +85,33 @@ const UserProfile = () => {
     700: 1
   };
 
-  const handleCloseUploadCard = () => {
-    setUploadCardClosed(true);
-    window.location.reload();
-  };
+  
   const handleCloseEditProfile = () => {
     setEditProfileModalClosed(true);
-    window.location.reload();
   };
+  
 
   const logoutHandler = () => {
     dispatch(logout());
+    navigate('/login');
   };
 
   return (
     <div className="user-profile-container">
       <Helmet>
-        <meta http-equiv="Cache-Control" content="no-store" />
-        <meta http-equiv="Pragma" content="no-cache" />
-        <meta http-equiv="Expires" content="0" />
+        <meta httpEquiv="Cache-Control" content="no-store" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
       </Helmet>
       <Row className="profile-row">
         <Col xs={12} md={3} className="profile-col">
           <div className="user-profile-image">
-            <Image src={currentUser.image} roundedCircle className="profile-image" />
+            <Image 
+              src={currentUser.image || 'icons8-user-64.png'} 
+              roundedCircle 
+              className="profile-image" 
+              onError={(e) => { e.target.src = 'icons8-user-64.png'; }}
+            />
           </div>
         </Col>
         <Col xs={12} md={9}>
@@ -97,36 +146,37 @@ const UserProfile = () => {
             </Col>
           </Row>
         </Col>
-        <Col className="profile-col">
-          <Col className="d-flex justify-content-center">
-            <UploadCard user={currentUser} onClose={handleCloseUploadCard} />
-          </Col>
-        </Col>
         
       </Row>
 
       <div className="products-grid">
-        <div style={{ display: 'flex', justifyContent: 'space-between', paddingBlockStart: '50px' }}></div>
         {loading ? (
-          <div>Loading...</div>
-        ) : (
-          <div>
-            {products.length === 0 ? (
-              <div className="no-products">
-                <p>No products yet.</p>
-              </div>
-            ) : (
-              <Masonry breakpointCols={breakpointColumnsObj} className="my-masonry-grid" columnClassName="my-masonry-grid_column">
-                {filteredProducts.map((product) => (
-                  <div key={product._id} className="my-masonry-grid_item">
-                    <ImageCard product={product} />
-                  </div>
-                ))}
-              </Masonry>
-            )}
+          <div className="d-flex justify-content-center">
+            <div>Loading...</div>
           </div>
+        ) : error ? (
+          <div className="alert alert-danger">{error}</div>
+        ) : photos.length === 0 ? (
+          <div className="no-products">
+            <p>No photos yet.</p>
+          </div>
+        ) : (
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className="my-masonry-grid"
+            columnClassName="my-masonry-grid_column"
+          >
+            {photos.map((photo) => (
+              <div key={photo._id} className="my-masonry-grid_item">
+                <ImageCard photo={photo} />
+              </div>
+            ))}
+          </Masonry>
         )}
-         {!EditProfileModalClosed && <EditProfileModal user ={currentUser} onClose={handleCloseEditProfile} />}
+
+        {!EditProfileModalClosed && (
+          <EditProfileModal user={currentUser} onClose={handleCloseEditProfile} />
+        )}
       </div>
     </div>
   );
