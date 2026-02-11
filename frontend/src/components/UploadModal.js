@@ -72,28 +72,32 @@ const UploadModal = ({ isOpen, onClose, user, eventId }) => {
   const handleImageChange = useCallback(
     async (e) => {
       const file = e.target.files[0];
-      setImageURL(file)
+      if (!file) return;
+  
+      setImageURL(file);
+  
       const formdata = new FormData();
-      formdata.append('image', file);
+      formdata.append("image", file);
+  
       try {
         const config = {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            "Content-Type": "multipart/form-data",
+          },
         };
-        const { data } = await (async () => {
-          return await axios.post('/api/upload', formdata, config);
-        })();
-        // Convert Windows path to web path: \uploads\image-xxx.jpg -> /uploads/image-xxx.jpg
-        const imagePath = data.replace(/\\/g, '/');
-        setImage(imagePath);
+  
+        const { data } = await axios.post("/api/upload", formdata, config);
+  
+        setImage(data.url);
+  
       } catch (error) {
         console.log(error);
+        alert("Upload failed");
       }
     },
-    [setImage]
+    []
   );
-  
+
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
