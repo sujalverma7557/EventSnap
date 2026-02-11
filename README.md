@@ -6,6 +6,9 @@ Instead of photos getting scattered across WhatsApp groups, Drive links, or pers
 
 ---
 
+## 🚀 Live Demo
+### 🔗 https://eventsnap-y80e.onrender.com
+
 ## ✨ Features
 
 ### 🔐 Authentication
